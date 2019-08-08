@@ -50,6 +50,7 @@ def register():
 @csrf.exempt
 @app.route('/login/',methods=['GET','POST'])
 def login():
+    result = {'message':''}
     if request.method == 'POST':
         from_data = request.form
         username = from_data.get('username')
@@ -62,7 +63,11 @@ def login():
                 response.set_cookie('user_id',str(user.id))
                 session['username'] = username
                 return response
-    return render_template('login.html')
+            else:
+                result['message'] = '用户名或密码错误'
+        else:
+            result['message'] = '用户名或密码不能为空'
+    return render_template('login.html',**locals())
 
 @csrf.exempt
 @app.route('/index/',methods=['GET','POST'])
@@ -136,29 +141,3 @@ def userValid():
         result['code'] = 400
     return jsonify(result)
 
-@csrf.exempt
-@app.route('/login_ajax/',methods=['POST','GET'])
-def login_ajax():
-    result = {'code': '', 'data': ''}
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        if username and password:
-            user = User.query.get(username=username).first()
-            if user:
-                if user.password == setPassword(password):
-                    result['code'] = 200
-                    result['data'] = '登录成功'
-                else:
-                    result['code'] = 400
-                    result['data'] = '密码错误'
-            else:
-                result['code'] = 400
-                result['data'] = '用户名不存在'
-        else:
-            result['code'] = 400
-            result['data'] = '用户名或密码不能为空'
-    else:
-        result['code'] = 400
-        result['data'] = '请求方式有误'
-    return jsonify(result)

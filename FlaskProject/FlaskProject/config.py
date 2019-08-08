@@ -8,7 +8,8 @@ class BaseConfig(object):
 
 class DebugConfig(BaseConfig):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'Student.sqlite')
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:0000@localhost/students'
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'Student.sqlite')
 
 class OnlineConfig(BaseConfig):
     DEBUG = False
