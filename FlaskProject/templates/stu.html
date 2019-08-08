@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+    {% block title %}
+        学员信息表
+    {% endblock %}
+{% block container %}
+<table class="table table-success " >
+
+    <thead class="card-header py-3" >
+    <tr >
+        <th>姓名</th>
+        <th>年龄</th>
+        <th>分数</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+        <tbody class="card-body">
+    {% for s in students %}
+    <tr >
+        <td>{{ s.name }}</td>
+        <td>{{ s.age }}</td>
+        <td>{{ s.gender }}</td>
+        <td>
+            <input type="button" class="btn btn-danger btn-circle btn-sm" value="开除">
+            <input type="button" class="btn btn-success btn-circle btn-sm" value="奖励">
+        </td>
+    </tr>
+        </tbody>
+    {% endfor %}
+
+</table>
+{% endblock %}
