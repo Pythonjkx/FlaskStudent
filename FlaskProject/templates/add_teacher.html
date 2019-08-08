@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+添加教师
+{% endblock %}
+
+{% block container %}
+    <form method="post">
+    {{ teacher.crsf_token }}
+    <div>
+    {{ teacher.name }}
+    </div>
+    <br>
+    <div>
+    {{ teacher.age }}
+    </div>
+    <br>
+    <div>
+    {{ teacher.gender }}
+    </div>
+    <br>
+    <div>
+    {{ teacher.course }}
+    </div>
+    <br>
+    <div>
+        <input type="submit" name="submit" value="提交" class="btn btn-primary form-control">
+    </div>
+    </form>
+{% endblock %}

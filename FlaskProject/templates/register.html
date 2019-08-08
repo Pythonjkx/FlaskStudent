@@ -47,12 +47,14 @@
                       <option value='1'>学生</option>
                   </select>
 
-                    <input type='submit' class='btn btn-primary btn-block'  value='注 册'>
+                    <input type='submit' class='btn btn-primary btn-block' id="submit" value='注 册'>
               </form>
               <br>
               <div class="text-center">
                 <a class="small" href="/login/">已有账户，去登录！</a>
               </div>
+                <br>
+                <p id="errorMessage" style="color: red"></p>
             </div>
           </div>
         </div>
@@ -70,7 +72,39 @@
 
   <!-- Custom scripts for all pages-->
   <script src="/static/js/sb-admin-2.min.js"></script>
+<script>
+    $('#username').blur(
+        function () {
+            var value = $('#username').val();
+            var url = '/userValid/';
+            var senDate = {
+                'username':value,
+                'csrf_token':'{{ csrf_token() }}'
+            };
+            console.log(senDate);
+            $.ajax(
+                {
+                    type:'post',
+                    url:url,
+                    data:senDate,
+                    success:function (data) {
+                        if (data.code == 400){
+                            $('#submit').attr('disabled',true)
+                        }else {
+                            $('#submit').attr('disabled',false)
+                        }
+                        $('#errorMessage').text(data.data);
+                        console.log(data.data)
+                    },
+                    error:function (error) {
+                        console.log(error)
+                    }
+                }
+            )
+        }
+    )
 
+    </script>
 </body>
 
 </html>

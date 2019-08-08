@@ -1,17 +1,17 @@
 from FlaskProject.main import models
-session = models.session()
+db = models.session()
 
 class BaseModel(models.Model):
     __abstract__ = True
     id = models.Column(models.Integer, primary_key=True, autoincrement=True)
 
     def save(self):
-        session.add(self)
-        session.commit()
+        db.add(self)
+        db.commit()
 
     def delete_obj(self):
-        session.delete(self)
-        session.commit()
+        db.delete(self)
+        db.commit()
 
 class User(BaseModel):
     __tablename__ = 'user'

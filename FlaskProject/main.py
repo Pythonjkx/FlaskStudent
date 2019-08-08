@@ -1,8 +1,10 @@
 import os
 from flask import Flask
+from flask import session
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFProtect
 app = Flask(__name__)
-
+csrf = CSRFProtect(app)
 # BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 

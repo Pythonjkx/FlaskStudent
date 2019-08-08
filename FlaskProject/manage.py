@@ -3,4 +3,4 @@ from FlaskProject.views import app
 
 if __name__ == '__main__':
     # models.create_all()
-    app.run()
+    app.run(use_reloader = False)
