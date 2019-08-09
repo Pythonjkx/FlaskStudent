@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block container %}
+{% for users in user %}
+{% if users.identity == 0 %}
+
+<p class="btn btn-primary" style="margin-left: 20px;">
+教师 {{ request.cookies.username }} 的信息中心
+</p>
+
+{% else %}
+  <p class="btn btn-primary" style="margin-left: 20px;">
+学生 {{ request.cookies.username }} 的信息中心
+</p>
+
+{% endif %}
+
+{% endfor %}
+
+
+
+{% endblock %}

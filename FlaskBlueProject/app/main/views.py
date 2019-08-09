@@ -74,6 +74,8 @@ def login():
 @main.route('/index/',methods=['GET','POST'])
 @loginVaild
 def index():
+    username = request.cookies.get('username')
+    user = User.query.filter_by(username=username).all()
     return render_template('index.html', **locals())
 
 
@@ -142,3 +144,13 @@ def userValid():
         result['code'] = 400
     return jsonify(result)
 
+@csrf.exempt
+@main.route('/students/',methods=['POST','GET'])
+def students():
+    username = request.cookies.get('username')
+    if username:
+        student = Student.query.filter_by(name=username).first()
+        # couse = student.to_course().all()
+        # grade = Grade.query.get(student.id).all()
+        print(student)
+    return render_template('students.html',**locals())

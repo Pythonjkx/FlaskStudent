@@ -6,10 +6,12 @@ class BaseModel(models.Model):
     id = models.Column(models.Integer, primary_key=True, autoincrement=True)
 
     def save(self):
+        db = models.session()
         db.add(self)
         db.commit()
 
     def delete_obj(self):
+        db = models.session()
         db.delete(self)
         db.commit()
 
