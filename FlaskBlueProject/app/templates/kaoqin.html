@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+考勤系统
+{% endblock %}
+{% block container %}
+<div class="card shadow mb-4"></div>
+        <div class="card-header" style="text-align: center;">
+        <span style="color: #2c9faf;font-size: 30px;font-family: 黑体">欢迎{{ request.cookies.username }}同学！</span>
+        </div>
+         <div class="card-body">
+        <span style="color: #1cc88a;font-size: 25px;font-family: 仿宋">
+        <p>
+            学生姓名：{{ student.name }}
+        </p><p>
+            学生年龄：{{ student.age }}
+        </p><p>
+            学生性别：{{ student.gender }}
+        </p><p>
+            在读课程：
+            {% for c in course %}
+            {{ c.lable }}
+            {% endfor %}
+
+
+        </p>
+            <p>
+            签到时间：{{ now }}
+        </p>
+        </span>
+        </div>
+{% endblock %}

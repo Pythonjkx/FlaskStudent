@@ -18,7 +18,12 @@
             <td>{{ student.name }}</td>
             <td>{{ student.age }}</td>
             <td>{{ student.gender }}</td>
-            <td>{{ course.lable }}</td>
+    <td>
+        {% for c in course %}
+        {{ c.lable }}
+        {% endfor %}
+
+            </td>
         </tr>
 </tbody>
 </table>

@@ -1,4 +1,5 @@
 import hashlib
+import time
 from flask import render_template
 from flask import redirect
 from flask import request
@@ -22,6 +23,8 @@ def setPassword(password):
 def hello_world():
     return render_template('base.html')
 
+
+#登录验证装饰器
 def loginVaild(fun):
     def inner(*args,**kwargs):
         user_cookie = request.cookies.get('username')
@@ -33,6 +36,9 @@ def loginVaild(fun):
         return redirect('/login/')
     return inner
 
+
+
+#注册
 @csrf.exempt
 @main.route('/register/',methods=['GET','POST'])
 def register():
@@ -50,9 +56,9 @@ def register():
     return render_template('register.html')
 
 
+# 登录
 @csrf.exempt
 @main.route('/login/',methods=['GET','POST'])
-
 def login():
     result = {'message':''}
     if request.method == 'POST':
@@ -81,6 +87,8 @@ def login():
             result['message'] = '用户名或密码不能为空'
     return render_template('login.html',**locals())
 
+
+# 首页
 @csrf.exempt
 @main.route('/index/',methods=['GET','POST'])
 @loginVaild
@@ -88,20 +96,38 @@ def login():
 def index():
     c = Course.query.all()
     username = request.cookies.get('username')
-    user = User.query.filter_by(username = username).first()
+    id = request.cookies.get('user_id')
+    user = User.query.filter_by(username = username).first()#第一对象的实例
     if user.identity == 1: #断是否为学生
-        s = Student()
-        s.name = username
-        s.age = request.form.get('age')
-        s.gender = request.form.get('gender')
-        s.save()
-    else:
-        username = request.cookies.get('username')
-        id  = request.cookies.get('user_id')
-        user = User.query.filter_by(username=username).first()#第一对象的实例
-
+        courseList = []
         if user.identity_id:#判断是否完善信息
-            teacher = Teacher.query.filter_by(id=int(user.identity_id)).first()#找老师表
+            student = Student.query.filter_by(id = int(user.identity_id)).first()#找学生表
+            course = student.to_course #反向查询所学课程
+            print(course)
+        else:
+            if request.method == 'POST':
+                course = request.form.getlist('course_id')
+                for c in course:
+                    course = Course.query.get(int(c))
+                    courseList.append(course)
+                s = Student()
+                s.name = username
+                s.age = request.form.get('age')
+                s.gender = request.form.get('gender')
+                s.to_course = courseList
+                s.save()
+                # 更新用户和学生关联
+                user.identity_id = s.id
+                user.save()
+                course = s.to_course  # 反向查询出学生对应的课程
+                response = make_response(render_template('index.html', **locals()))
+                response.set_cookie('identity_id', str(s.id))
+                return response
+    else:
+        # username = request.cookies.get('username')
+        # user = User.query.filter_by(username=username).first()#第一对象的实例
+        if user.identity_id:#判断是否完善信息
+            teacher = Teacher.query.filter_by(id = int(user.identity_id)).first()#找老师表
             course = teacher.to_course1
         else:
             if request.method == "POST":
@@ -121,6 +147,7 @@ def index():
     return render_template('index.html',**locals())
 
 
+# 退出
 @main.route('/logOut/',methods=['GET','POST'])
 def logOut():
     response = redirect('/login/')
@@ -131,13 +158,14 @@ def logOut():
     return response
 
 
-
+# 学生列表
 @main.route('/stu/',methods=['GET','POST'])
 def student_list():
     students = Student.query.all()
     return render_template('stu.html', **locals())
 
 
+# 添加教师
 @csrf.exempt
 @main.route('/add_teachers/',methods=['GET','POST'])
 def add_teacher():
@@ -164,7 +192,8 @@ def csrf_token_error():
     return render_template('csrf_403.html')
 
 
-@csrf.exempt
+# 用户校验
+# @csrf.exempt
 @main.route('/userValid/',methods=['POST','GET'])
 def userValid():
     result = {'code':'','data':''}
@@ -188,7 +217,7 @@ def userValid():
 
 
 # 学生个人信息
-@csrf.exempt
+# @csrf.exempt
 @main.route('/student/',methods=['POST','GET'])
 def student():
     name = request.cookies.get('username')
@@ -202,14 +231,14 @@ def student():
 
 
 # 学生列表
-@csrf.exempt
+# @csrf.exempt
 @main.route('/students/',methods=['POST','GET'])
 def students_list():
     student = Student.query.all()
     return render_template('students.html',**locals())
 
 #删除学生
-@csrf.exempt
+# @csrf.exempt
 @main.route('/del_student/',methods=['POST','GET'])
 def del_student():
     id = request.args.get('student_id')
@@ -229,7 +258,7 @@ def teacher():
 
 
 # 教师列表
-@csrf.exempt
+# @csrf.exempt
 @main.route('/teachers/',methods=['POST','GET'])
 def teachers_list():
     teacher = Teacher.query.all()
@@ -237,7 +266,7 @@ def teachers_list():
     return render_template('teachers.html',**locals())
 
 #删除老师
-@csrf.exempt
+# @csrf.exempt
 @main.route('/del_teacher/',methods=['POST','GET'])
 def del_teacher():
     id = request.args.get('teacher_id')
@@ -246,7 +275,7 @@ def del_teacher():
     return redirect('/teachers/')
 
 # 所有课程
-@csrf.exempt
+# @csrf.exempt
 @main.route('/all_course/',methods=['POST','GET'])
 def all_course():
     course = Course.query.all()
@@ -261,7 +290,7 @@ def all_course():
     return render_template('all_course.html',**locals())
 
 # 修改课程
-@csrf.exempt
+# @csrf.exempt
 @main.route('/update_course/',methods=['POST','GET'])
 def update_course():
     course_id = request.args.get('course_id')
@@ -277,7 +306,7 @@ def update_course():
     return render_template('update_course.html',**locals())
 
 # 删除课程
-@csrf.exempt
+# @csrf.exempt
 @main.route('/del_course/',methods=['POST','GET'])
 def del_course():
     id = request.args.get('course_id')
@@ -288,7 +317,7 @@ def del_course():
 
 
 #摸版视图
-@csrf.exempt
+# @csrf.exempt
 @main.route('/base/',methods=['POST','GET'])
 def base():
     return render_template('base.html')
@@ -298,3 +327,15 @@ def base():
 def claerCache():
     cache.clear()
     return 'is over'
+
+
+
+@main.route('/kaoqin/')
+def kaoqin():
+    result = {'static':''}
+    now = time.strftime('%Y-%m-%d   %H:%M:%S')
+    student_id = request.cookies.get('identity_id')
+    student = Student.query.get(int(student_id))
+    course = student.to_course
+
+    return render_template('kaoqin.html',**locals())

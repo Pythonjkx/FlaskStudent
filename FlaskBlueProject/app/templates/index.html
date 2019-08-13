@@ -1,105 +1,139 @@
 {% extends 'base.html' %}
 
 {% block container %}
+
 {% if user.identity == 0 %}
-    {% if request.cookies.identity_id %}
 
-        <div class="card shadow mb-4"></div>
-        <div class="card-header" style="text-align: center;">
-        <span style="color: #2c9faf;font-size: 30px;font-family: 黑体">欢迎 {{ request.cookies.username }} 教师来访！</span>
-        </div>
-         <div class="card-body">
-        <span style="color: #1cc88a;font-size: 25px;font-family: 仿宋">
-        <p>
-            教师姓名：{{ teacher.name }}
-        </p><p>
-            教师年龄：{{ teacher.age }}
-        </p><p>
-            教师性别：{{ teacher.gender }}
-        </p><p>
-            任教课程：{{ course.lable }}
-        </p>
-        </span>
-        </div>
+             {% if request.cookies.identity_id %}
 
-    {% else %}
+                <div class="card shadow mb-4"></div>
+                <div class="card-header" style="text-align: center;">
+                <span style="color: #2c9faf;font-size: 30px;font-family: 黑体">欢迎 {{ request.cookies.username }} 教师来访！</span>
+                </div>
+                 <div class="card-body">
+                <span style="color: #1cc88a;font-size: 25px;font-family: 仿宋">
+                <p>
+                    教师姓名：{{ teacher.name }}
+                </p><p>
+                    教师年龄：{{ teacher.age }}
+                </p><p>
+                    教师性别：{{ teacher.gender }}
+                </p><p>
+                    任教课程：{{ course.lable }}
+                </p>
+                </span>
+                </div>
 
-        <p>请教师 {{ request.cookies.username }}完善信息</p>
-        <form action="" method="post">
-        <table class="table">
-        <thead>
-        <tr>
-            <th>姓名</th>
-            <th>年龄</th>
-            <th>性别</th>
-            <th>课程</th>
-            <th>操作</th>
+            {% else %}
 
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>{{ request.cookies.username }}</td>
-            <td>
-                <input type="text" name="age" placeholder="年龄">
-            </td><td>
-                <input type="text" name="gender" placeholder="性别">
-            </td><td>
-            <select name="course_id" >
-                {% for f in c %}
-                <option  value="{{ f.id }}">{{ f.lable }}</option>
-                {% endfor %}
-            </select>
-            </td>
-        <td>
-            <input type="submit" class="btn btn-primary">
-        </td>
-        </tr>
+                <p>请教师 {{ request.cookies.username }}完善信息</p>
+                <form action="" method="post">
+                <table class="table">
+                <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>课程</th>
+                    <th>操作</th>
 
-        </tbody>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ request.cookies.username }}</td>
+                    <td>
+                        <input type="text" name="age" placeholder="年龄">
+                    </td><td>
+                        <input type="text" name="gender" placeholder="性别">
+                    </td><td>
+                    <select name="course_id" >
+                        {% for f in c %}
+                        <option  value="{{ f.id }}">{{ f.lable }}</option>
+                        {% endfor %}
+                    </select>
+                    </td>
+                <td>
+                    <input type="submit" class="btn btn-primary">
+                </td>
+                </tr>
 
-        </table>
-        </form>
-    {% endif %}
+                </tbody>
+
+                </table>
+                </form>
+            {% endif %}
 
 
 {% elif user.identity == 1 %}
+        {% if request.cookies.identity_id %}
+
+                    <div class="card shadow mb-4"></div>
+                    <div class="card-header" style="text-align: center;">
+                    <span style="color: #2c9faf;font-size: 30px;font-family: 黑体">欢迎 {{ request.cookies.username }} 同学来访！</span>
+                    </div>
+                     <div class="card-body">
+                    <span style="color: #1cc88a;font-size: 25px;font-family: 仿宋">
+                    <p>
+                        学生姓名：{{ student.name }}
+                    </p><p>
+                        学生年龄：{{ student.age }}
+                    </p><p>
+                        学生性别：{{ student.gender }}
+                    </p><p>
+                        所学课程：
+                        {% for c in course %}
+                        {{ c.lable }}
+                        {% endfor %}
+
+
+                    </p>
+                    </span>
+                    </div>
+
+        {% else %}
+
+                <p class="btn btn-primary" style="margin-left: 20px;">
+                学生 {{ request.cookies.username }} 的信息中心
+                </p>
+                <p>请完善信息</p>
+                <form action="" method="post">
+                <table class="table">
+                <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>课程</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ request.cookies.username }}</td>
+                    <td>
+                        <input type="text" name="age" placeholder="年龄">
+                    </td><td>
+                        <input type="text" name="gender" placeholder="性别">
+                    </td>
+                    <td>
+                 <select name="course_id" multiple="multiple">
+                    {% for f in c %}
+                     <option  value="{{ f.id }}">{{ f.lable }}</option>
+                    {% endfor %}
+                    </select>
+                    </td>
+                <td>
+                    <input type="submit" class="btn btn-primary">
+                </td>
+                </tr>
+                </tbody>
+                </table>
+                </form>
+        {% endif %}
+{% elif user.identity == 2 %}
     <p class="btn btn-primary" style="margin-left: 20px;">
-    学生 {{ request.cookies.username }} 的信息中心
+    欢迎超级管理员 {{ request.cookies.username }}
     </p>
-    <p>请完善信息</p>
-    <form action="" method="post">
-    <table class="table">
-    <thead>
-    <tr>
-        <th>姓名</th>
-        <th>年龄</th>
-        <th>性别</th>
-        <th>课程</th>
-        <th>操作</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>{{ request.cookies.username }}</td>
-        <td>
-            <input type="text" name="age" placeholder="年龄">
-        </td><td>
-            <input type="text" name="gender" placeholder="性别">
-        </td>
-        <td>
-        <select name="course_id" >
-            {% for f in c %}
-            <option  value="{{ f.id }}">{{ f.lable }}</option>
-            {% endfor %}
-        </select>
-        </td>
-    <td>
-        <input type="submit" class="btn btn-primary">
-    </td>
-    </tr>
-    </tbody>
-    </table>
-    </form>
 {% endif %}
 {% endblock %}
