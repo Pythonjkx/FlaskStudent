@@ -19,6 +19,7 @@
   <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
+{#{% cache 500 %}#}
 
 <body id="page-top">
 
@@ -40,7 +41,7 @@
       <hr class="sidebar-divider my-0">
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="/index/">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>导航中心</span></a>
       </li>
@@ -52,10 +53,7 @@
       <div class="sidebar-heading">
         Interface
       </div>
-        {% for users in user %}
-        {% if users.identity == 0 %}
-
-
+        {% if  request.cookies.identity == '0'%}
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -65,8 +63,8 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">个人信息:</h6>
-            <a class="collapse-item" href="buttons.html">基本情况</a>
-              <a class="collapse-item" href="buttons.html">学生信息</a>
+            <a class="collapse-item" href="/teacher/">个人信息</a>
+              <a class="collapse-item" href="/students/">学生列表</a>
             <a class="collapse-item" href="cards.html">课程管理</a>
           </div>
         </div>
@@ -74,28 +72,46 @@
 
       <!-- Nav Item - Utilities Collapse Menu -->
 
-        {% else %}
+        {% elif request.cookies.identity == '1' %}
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-cog"></i>
+
+
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-fw fa-wrench"></i>
           <span>学生信息</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">具体信息:</h6>
-            <a class="collapse-item" href="buttons.html">个人中心</a>
-            <a class="collapse-item" href="cards.html">课程情况</a>
+            <h6 class="collapse-header">Custom Utilities:</h6>
+            <a class="collapse-item" href="/student/">个人信息</a>
+            <a class="collapse-item" href="utilities-border.html">Borders</a>
+            <a class="collapse-item" href="utilities-animation.html">Animations</a>
+            <a class="collapse-item" href="utilities-other.html">Other</a>
           </div>
         </div>
       </li>
-
       <!-- Nav Item - Utilities Collapse Menu -->
-
+      {% else %}
+      </li>
+         <li class="nav-item active">
+        <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>课程管理</span>
+        </a>
+        <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Login Screens:</h6>
+            <a class="collapse-item" href="/all_course/">课程列表</a>
+            <a class="collapse-item" href="forgot-password.html">增加课程</a>
+           <a class="collapse-item" href="forgot-password.html">学生管理</a>
+           <a class="collapse-item" href="forgot-password.html">教师管理</a>
+          </div>
+        </div>
       </li>
         {% endif %}
-        {% endfor %}
+
 
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -279,8 +295,15 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.cookies.username }}</span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                {% if request.cookies.identity == '0' %}
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">教师{{ request.cookies.username }}</span>
+                    {% else %}
+                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">学生{{ request.cookies.username }}</span>
+                {% endif %}
+
+
+
+                  <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -373,6 +396,8 @@
   <script src="/static/js/sb-admin-2.min.js"></script>
 
 </body>
+
+{#{% endcache %}#}
 {% block script %}
 {% endblock %}
 </html>

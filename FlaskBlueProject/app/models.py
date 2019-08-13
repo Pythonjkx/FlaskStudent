@@ -19,7 +19,7 @@ class User(BaseModel):
     __tablename__ = 'user'
     username = models.Column(models.String(32))
     password = models.Column(models.String(32))
-    identity = models.Column(models.Integer)#0 教师 1 学生
+    identity = models.Column(models.Integer)#0 教师 1 学生,2超级管理员
     identity_id = models.Column(models.Integer,default='',nullable=True)
 
 # 学员表

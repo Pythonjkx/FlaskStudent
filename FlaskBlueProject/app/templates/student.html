@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+个人信息表
+{% endblock %}
+{% block container %}
+<table class="table table-success">
+<thead>
+<tr>
+    <th>姓名</th>
+    <th>年龄</th>
+    <th>性别</th>
+    <th>课程</th>
+</tr>
+</thead>
+<tbody>
+    <tr>
+            <td>{{ student.name }}</td>
+            <td>{{ student.age }}</td>
+            <td>{{ student.gender }}</td>
+            <td>{{ course.lable }}</td>
+        </tr>
+</tbody>
+</table>
+{% endblock %}

@@ -29,6 +29,7 @@
         <!-- Nested Row within Card Body -->
         <div class="row">
           <div  class="col-lg-5 d-none d-lg-block bg-login-image"></div>
+{#            {% cache 500 %}#}
           <div class="col-lg-7">
             <div class="p-5">
               <div class="text-center">
@@ -52,6 +53,7 @@
                 <p style="color: red">{{ result.message }}</p>
             </div>
           </div>
+{#            {% endcache %}#}
         </div>
       </div>
     </div>

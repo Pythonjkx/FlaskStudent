@@ -5,7 +5,7 @@ class BaseConfig(object):
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SECRET_KEY = 'jkx123' #用来生成session_id和csrf_token
-
+    CACHE_TYPE = 'simple'
 class DebugConfig(BaseConfig):
     DEBUG = True
     # SQLALCHEMY_DATABASE_URI = 'mysql://root:0000@localhost/students'

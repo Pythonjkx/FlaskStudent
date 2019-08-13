@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+  <div aria-labelledby="userDropdown">
+                <div class="dropdown-divider"></div>
+                <a class="btn btn-info" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="btn btn-info" ></i>
+                  添加课程
+                </a>
+              </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">添加课程</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+
+
+        <div>
+        <input type="text" class="form-control" name="name" placeholder="课程名称">
+        </div>
+
+        <div>
+        <input type="text" class="form-control" name="description" placeholder="课程描述">
+        </div>
+
+        <br>
+
+
+
+
+        <div class="modal-footer">
+           <input type="submit" name="submit" value="提交" class="btn btn-primary form-control">
+        </div>
+      </div>
+        </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block container %}
+    <form method="post">
+{#    {{ course.crsf_token }}#}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>课程名称</th>
+                <th>课程描述</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for c in course %}
+            <tr>
+               <td>{{ c.lable }}</td>
+               <td>{{ c.description }}</td>
+               <td>
+                   <a href="/del_course/?course_id={{ c.id }}" class="btn btn-warning">删除</a>
+                   <a href="/update_course/?course_id={{ c.id }}" class="btn btn-warning">修改</a>
+               </td>
+            </tr>
+            {% endfor %}
+
+
+
+
+
+            </tbody>
+        </table>
+    </form>
+{% endblock %}
